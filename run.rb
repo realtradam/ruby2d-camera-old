@@ -10,7 +10,8 @@ require_relative 'animator'
 Camera << @background
 Camera.add @player
 
-# This controls how fast the camera will follow an object
+# This controls how slowly the camera will follow an object
+# Set to 1 to not have any elasticity
 # it is not used by the .move_to or .move_by
 Camera.elasticity = 10
 
@@ -80,7 +81,8 @@ update do
     square.update Camera.camera_position
   end
   
-
+  
+  # Alternating between follow and manual control
   if @is_follow
     Camera.follow @player
   else

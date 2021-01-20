@@ -1,5 +1,13 @@
 # Ruby2D Camera Demo
 
+Controls:
+
+WASD to move character  
+IJKL to switch camera into manual mode, and to move it around  
+F to switch camera back into follow mode  
+
+---
+
 I wanted to make a proof of concept to see how feasible it is to implement a camera system in Ruby2D. Turns out it is very feasible :D  
 
 How it works:
@@ -9,3 +17,5 @@ If you want to use this little demo in your own projects feel free to do so! All
 See the code as an example for how it is used.
 
 Credit is appreciated but not required :)
+
+
