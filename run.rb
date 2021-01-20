@@ -2,8 +2,8 @@ require 'ruby2d'
 require_relative 'camera'
 require_relative 'animator'
 
-@background = Image.new('background.png')
-@player =  Image.new('player.png')
+@background = Image.new('assets/background.png')
+@player =  Image.new('assets/player.png')
 @squares = []
 
 # There is 2 ways you can add objects to be known and controlled by the camera, both do the same thing

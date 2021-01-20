@@ -37,6 +37,5 @@ class AnimatedSquare
         @speed = -@speed
       end
     end
-    puts offset
   end
 end
