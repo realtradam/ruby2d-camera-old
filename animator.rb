@@ -73,18 +73,18 @@ class AnimatedSquare
     puts
     if axis.zero?
       @square.x += speed * zoom
-      self.speed = if @square.x >= ((range[1] - offset[0]))
-                     -speed.abs
-                   elsif @square.x <= ((range[0] - offset[0]))
-                     speed.abs
-                   end
+      if @square.x >= ((range[1] - offset[0]))
+        self.speed = -speed.abs
+      elsif @square.x <= ((range[0] - offset[0]))
+        self.speed = speed.abs
+      end
     else
       @square.y += speed * zoom
-      self.speed = if @square.y >= ((range[1] - offset[1]))
-                     -speed.abs
-                   elsif @square.y <= ((range[0] - offset[1]))
-                     speed.abs
-                   end
+      if @square.y >= ((range[1] - offset[1]))
+        self.speed = -speed.abs
+      elsif @square.y <= ((range[0] - offset[1]))
+        self.speed = speed.abs
+      end
     end
   end
 end
