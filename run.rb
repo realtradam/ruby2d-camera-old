@@ -112,7 +112,6 @@ update do
   end
   # Need to use the cameras position as an offset to keep the shapes range of movement working
   # Need to make the zoom also give an offset
-  require 'debug'
   @squares.each do |square|
     square.update(Camera.camera_position, Camera.zoom_level)
   end
