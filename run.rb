@@ -110,10 +110,10 @@ end
 
 on :key do |event|
   if event.key == 'q'
-    @zoom_by = 1.1
+    @zoom_by = 1.05
   end
   if event.key == 'e'
-    @zoom_by = 0.9
+    @zoom_by = 0.95
   end
   if event.key == 'r'
     Camera.zoom_to 1
@@ -148,7 +148,6 @@ update do
   #Camera.move_to(50,50)
   @cam_x_move = 0
   @cam_y_move = 0
-  p @ui_pos.inspect
   @ui_pos.text = "Camera Position: #{Camera.camera_position[0].round(1)}, #{Camera.camera_position[1].round(1)}"
   @ui_zoom.text = "Zoom: #{Camera.zoom_level.round(3)}"
 end
