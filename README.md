@@ -1,10 +1,16 @@
 # Ruby2D Camera Demo
 
+`ruby run.rb` to run the demo
+
+---
+
 Controls:
 
 WASD to move character  
 IJKL to switch camera into manual mode, and to move it around  
 F to switch camera back into follow mode  
+Q/E to zoom change the zoom
+R to reset the zoom
 
 ---
 
