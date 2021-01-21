@@ -28,9 +28,9 @@ class Camera
       object.x *= zoom
       object.y *= zoom
     end
+    self.zoom_level *= zoom
     move_by(Window.width / 2 * (zoom - 1),
             Window.height / 2 * (zoom - 1))
-    self.zoom_level *= zoom
   end
 
   def self.zoom_to(zoom)
@@ -38,8 +38,8 @@ class Camera
   end
 
   def self.follow(item)
-    move_to((item.x - (Window.width / 2)) / elasticity,
-            (item.y - (Window.height / 2)) / elasticity)
+    move_to(((item.x + item.size / 2) - (Window.width / 2)) / elasticity,
+            ((item.y + item.size / 2) - (Window.height / 2)) / elasticity)
   end
 
   def self.objects
@@ -59,8 +59,8 @@ class Camera
   end
 
   def self.move_by(x, y)
-    camera_position[0] += x
-    camera_position[1] += y
+    camera_position[0] += x / zoom_level
+    camera_position[1] += y / zoom_level
     objects.each do |object|
       object.x -= x
       object.y -= y
@@ -68,8 +68,8 @@ class Camera
   end
 
   def self.move_to(x, y)
-    self.camera_position = [x + camera_position[0],
-                            y + camera_position[1]]
+    self.camera_position = [x / zoom_level + camera_position[0],
+                            y / zoom_level + camera_position[1]]
     objects.each do |object|
       object.x -= x
       object.y -= y

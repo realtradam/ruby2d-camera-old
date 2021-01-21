@@ -61,28 +61,18 @@ class AnimatedSquare
   end
 
   def update(offset, zoom)
-    #width_zoom_offset = Window.width/2 * (zoom-1)
-    #height_zoom_offset = Window.height/2 * (zoom-1)
-    puts
-    p @square
-    puts
-    p @speed
-    puts
-    p zoom
-    puts
-    puts
     if axis.zero?
       @square.x += speed * zoom
-      if @square.x >= ((range[1] - offset[0]))
+      if @square.x >= ((range[1] - offset[0])) * zoom
         self.speed = -speed.abs
-      elsif @square.x <= ((range[0] - offset[0]))
+      elsif @square.x <= ((range[0] - offset[0])) * zoom
         self.speed = speed.abs
       end
     else
       @square.y += speed * zoom
-      if @square.y >= ((range[1] - offset[1]))
+      if @square.y >= ((range[1] - offset[1])) * zoom
         self.speed = -speed.abs
-      elsif @square.y <= ((range[0] - offset[1]))
+      elsif @square.y <= ((range[0] - offset[1])) * zoom
         self.speed = speed.abs
       end
     end

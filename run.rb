@@ -42,6 +42,26 @@ Camera.elasticity = 10
   Camera << @squares.last
 end
 
+# An example of static elements on the screen that
+# do not follow the camera movement
+Rectangle.new(
+  width: 350,
+  height: 70,
+  color: 'navy'
+)
+@ui_pos = Text.new(
+  'pos: 0,0',
+  x: 10,
+  y: 10,
+  color: 'teal'
+)
+@ui_zoom = Text.new(
+  'zoom: 0',
+  x: 10,
+  y: 40,
+  color: 'lime'
+)
+
 
 # How fast the player can move
 @speed = 10
@@ -128,6 +148,9 @@ update do
   #Camera.move_to(50,50)
   @cam_x_move = 0
   @cam_y_move = 0
+  p @ui_pos.inspect
+  @ui_pos.text = "Camera Position: #{Camera.camera_position[0].round(1)}, #{Camera.camera_position[1].round(1)}"
+  @ui_zoom.text = "Zoom: #{Camera.zoom_level.round(3)}"
 end
 
 show
