@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ruby2d'
 require_relative 'camera'
 require_relative 'animator'
@@ -6,13 +8,15 @@ require_relative 'animator'
 @player =  Image.new('assets/player.png')
 @squares = []
 
+# Use this to add a few extra methods to an Image
 module SizableImage
   def size
-    self.width
+    width
   end
-  def size= value
-    self.height *= (value / self.width)
-    self.width *= (value / self.width)
+
+  def size=(size)
+    self.height *= (size / width)
+    self.width *= (size / width)
   end
 end
 
@@ -30,9 +34,12 @@ Camera.elasticity = 10
 
 # If you want to use a camera, you need all elements in the world to be known to it
 # Exeptions would be things such as UI elements where you want them statically placed on the screen
-(1..25).each do
-  @squares << AnimatedSquare.new(x: (0..1920).to_a.sample, y: (0..1080).to_a.sample, size: (10..50).to_a.sample, color: 'random')
-  Camera << @squares.last 
+25.times do
+  @squares << AnimatedSquare.new(x: (0..1920).to_a.sample,
+                                 y: (0..1080).to_a.sample,
+                                 size: (10..50).to_a.sample,
+                                 color: 'random')
+  Camera << @squares.last
 end
 
 
@@ -60,8 +67,6 @@ on :key do |event|
   if event.key == 's'
     @y_move += @speed * Camera.zoom_level
   end
-
-
   if event.key == 'j'
     @cam_x_move -= @speed
     @is_follow = false
@@ -78,11 +83,9 @@ on :key do |event|
     @cam_y_move += @speed
     @is_follow = false
   end
-
   if event.key == 'f'
     @is_follow = true
   end
-
 end
 
 on :key do |event|
@@ -105,31 +108,27 @@ update do
 
   if @zoom_by != 1
     Camera.zoom_by @zoom_by
+    @zoom_by = 1
   end
-  @zoom_by = 1
-
   # Need to use the cameras position as an offset to keep the shapes range of movement working
   # Need to make the zoom also give an offset
+  require 'debug'
   @squares.each do |square|
-    square.update(Camera.camera_position,Camera.zoom_level)
+    square.update(Camera.camera_position, Camera.zoom_level)
   end
-  
-  
+
   # Alternating between follow and manual control
   if @is_follow
     Camera.follow @player
   else
-    Camera.move_by(@cam_x_move,@cam_y_move)
+    Camera.move_by(@cam_x_move, @cam_y_move)
   end
 
-  
   # This function will teleport the camera directory to those coordinates
   # It is used by Camera.follow but you can use it yourself too!
   #Camera.move_to(50,50)
   @cam_x_move = 0
   @cam_y_move = 0
-
 end
 
 show
-
