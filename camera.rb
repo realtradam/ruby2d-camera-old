@@ -1,5 +1,23 @@
 
 class Camera
+
+  def self.zoom_level
+    @zoom_level ||= 1
+  end
+
+  def self.zoom_by zoom
+    objects.each do |object|
+      object.size *= zoom
+      object.x *= zoom
+      object.y *= zoom
+    end
+    self.move_by(Window.width/2 * (zoom-1),Window.height/2 * (zoom-1))
+    self.zoom_level *= zoom
+  end
+
+  def self.zoom_to zoom
+    self.zoom_by(zoom/self.zoom_level)
+  end
   
   def self.elasticity
     @elasticity ||= 1
@@ -59,6 +77,10 @@ class Camera
 
   def self.camera_position= array
     @camera_position = array
+  end
+
+  def self.zoom_level= value
+    @zoom_level = value
   end
 
   

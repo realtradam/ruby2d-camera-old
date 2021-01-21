@@ -6,6 +6,19 @@ require_relative 'animator'
 @player =  Image.new('assets/player.png')
 @squares = []
 
+module SizableImage
+  def size
+    self.width
+  end
+  def size= value
+    self.height *= (value / self.width)
+    self.width *= (value / self.width)
+  end
+end
+
+@background.extend SizableImage
+@player.extend SizableImage
+
 # There is 2 ways you can add objects to be known and controlled by the camera, both do the same thing
 Camera << @background
 Camera.add @player
@@ -32,19 +45,20 @@ end
 @cam_x_move = 0
 @cam_y_move = 0
 @is_follow = true
+@zoom_by = 1
 
 on :key do |event|
   if event.key == 'a'
-    @x_move -= @speed
+    @x_move -= @speed * Camera.zoom_level
   end
   if event.key == 'd'
-    @x_move += @speed
+    @x_move += @speed * Camera.zoom_level
   end
   if event.key == 'w'
-    @y_move -= @speed
+    @y_move -= @speed * Camera.zoom_level
   end
   if event.key == 's'
-    @y_move += @speed
+    @y_move += @speed * Camera.zoom_level
   end
 
 
@@ -68,6 +82,19 @@ on :key do |event|
   if event.key == 'f'
     @is_follow = true
   end
+
+end
+
+on :key do |event|
+  if event.key == 'q'
+    @zoom_by = 1.1
+  end
+  if event.key == 'e'
+    @zoom_by = 0.9
+  end
+  if event.key == 'r'
+    Camera.zoom_to 1
+  end
 end
 
 update do
@@ -76,9 +103,15 @@ update do
   @x_move = 0
   @y_move = 0
 
+  if @zoom_by != 1
+    Camera.zoom_by @zoom_by
+  end
+  @zoom_by = 1
+
   # Need to use the cameras position as an offset to keep the shapes range of movement working
+  # Need to make the zoom also give an offset
   @squares.each do |square|
-    square.update Camera.camera_position
+    square.update(Camera.camera_position,Camera.zoom_level)
   end
   
   
