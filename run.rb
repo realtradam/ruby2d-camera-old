@@ -119,6 +119,11 @@ on :key do |event|
     Camera.zoom_to 1
   end
 end
+@quad = Quad.new(x1: 100, y1: 100,
+                 x2: 120, y2: 100,
+                 x3: 120, y3: 120,
+                 x4: 100, y4: 120)
+Camera << @quad
 
 update do
   @player.x += @x_move
@@ -138,7 +143,7 @@ update do
 
   # Alternating between follow and manual control
   if @is_follow
-    Camera.follow @player
+    #Camera.follow @player
   else
     Camera.move_by(@cam_x_move, @cam_y_move)
   end
