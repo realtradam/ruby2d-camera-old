@@ -15,7 +15,7 @@ class AnimatedSquare
   attr_writer :speed
 
   def speed
-    @speed ||= (1..5).to_a.sample
+    @speed ||= (0..5).to_a.sample
   end
 
   def axis

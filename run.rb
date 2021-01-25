@@ -5,7 +5,11 @@ require_relative 'camera'
 require_relative 'animator'
 
 @background = Image.new('assets/background.png')
-@player =  Image.new('assets/player.png')
+#@player =  Image.new('assets/player.png')
+@player = Quad.new(x1: 0, y1: 0,
+                 x2: 20, y2: 0,
+                 x3: 20, y3: 20,
+                 x4: 0, y4: 20)
 @squares = []
 
 # Use this to add a few extra methods to an Image
@@ -21,7 +25,7 @@ module SizableImage
 end
 
 @background.extend SizableImage
-@player.extend SizableImage
+#@player.extend SizableImage
 
 # There is 2 ways you can add objects to be known and controlled by the camera, both do the same thing
 Camera << @background
@@ -76,16 +80,16 @@ Rectangle.new(
 
 on :key do |event|
   if event.key == 'a'
-    @x_move -= @speed * Camera.zoom_level
+    @x_move -= @speed
   end
   if event.key == 'd'
-    @x_move += @speed * Camera.zoom_level
+    @x_move += @speed
   end
   if event.key == 'w'
-    @y_move -= @speed * Camera.zoom_level
+    @y_move -= @speed
   end
   if event.key == 's'
-    @y_move += @speed * Camera.zoom_level
+    @y_move += @speed
   end
   if event.key == 'j'
     @cam_x_move -= @speed
@@ -119,13 +123,15 @@ on :key do |event|
     Camera.zoom_to 1
   end
 end
-@quad = Quad.new(x1: 100, y1: 100,
-                 x2: 120, y2: 100,
-                 x3: 120, y3: 120,
-                 x4: 100, y4: 120)
+@quad = Quad.new(x1: 0, y1: 0,
+                 x2: 20, y2: 0,
+                 x3: 20, y3: 20,
+                 x4: 0, y4: 20)
 Camera << @quad
-
+@frame = 0
 update do
+  @frame += 1
+  @frame %= 60
   @player.x += @x_move
   @player.y += @y_move
   @x_move = 0
@@ -140,10 +146,13 @@ update do
   @squares.each do |square|
     square.update(Camera.camera_position, Camera.zoom_level)
   end
-
+  @quad.x += 1
+  @quad.color = 'random' if @frame.zero?
   # Alternating between follow and manual control
+  puts @player.x
+  puts @player.y
   if @is_follow
-    #Camera.follow @player
+    Camera.follow @player
   else
     Camera.move_by(@cam_x_move, @cam_y_move)
   end
