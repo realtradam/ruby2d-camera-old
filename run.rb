@@ -50,7 +50,7 @@ end
 # do not follow the camera movement
 Rectangle.new(
   width: 350,
-  height: 70,
+  height: 105,
   color: 'navy'
 )
 @ui_pos = Text.new(
@@ -65,6 +65,25 @@ Rectangle.new(
   y: 40,
   color: 'lime'
 )
+@ui_rotation = Text.new(
+  'rotation: 0',
+  x: 10,
+  y: 70,
+  color: 'lime'
+)
+Rectangle.new(
+  x: (Window.width - 120),
+  width: 120,
+  height: 45,
+  color: 'navy'
+)
+@ui_fps = Text.new(
+  'fps: 60.00',
+  x: (Window.width - 110),
+  y: 10,
+  color: 'teal'
+)
+
 
 
 # How fast the player can move
@@ -146,15 +165,16 @@ update do
   @squares.each do |square|
     square.update(Camera.camera_position, Camera.zoom_level)
   end
-  @quad.rotate(50 - @quad.x,50 - @quad.y,5)
+  @quad.rotate(50 - @quad.x,50 - @quad.y,30) if @frame.zero?
   @quad.color = 'random' if @frame.zero?
+  puts @quad.rotation_degrees
   # Alternating between follow and manual control
   if @is_follow
     Camera.follow @player
   else
     Camera.move_by(@cam_x_move, @cam_y_move)
   end
-  @player.rotate(@player.x1, @player.y1, 5)
+  @player.rotate(0, 0, 5)
 
   # This function will teleport the camera directory to those coordinates
   # It is used by Camera.follow but you can use it yourself too!
@@ -163,6 +183,7 @@ update do
   @cam_y_move = 0
   @ui_pos.text = "Camera Position: #{Camera.camera_position[0].round(1)}, #{Camera.camera_position[1].round(1)}"
   @ui_zoom.text = "Zoom: #{Camera.zoom_level.round(3)}"
+  @ui_fps.text = "FPS: #{Window.fps.round(2)}"
 end
 
 show

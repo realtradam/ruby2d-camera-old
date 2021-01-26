@@ -35,6 +35,7 @@ module QuadCameraTracker
   def height
     [@y1, @y2, @y3, @y4].max - [@y1, @y2, @y3, @y4].min
   end
+
   def x
     @x ||= @x1 / Camera.zoom_level + Camera.camera_position[0]
   end
@@ -75,6 +76,8 @@ module QuadCameraTracker
     # undo rotation/translation/zoom
   end
 
+  # Should modify the x1 methods so they move everything else isntead
+  # this is so that x1 is always the "origin" aka 0,0 of the shape
   def x1=(x1)
     @x1 = ((x1 + x) - Camera.camera_position[0]) * Camera.zoom_level
     # add rotation level
@@ -177,6 +180,7 @@ module QuadCameraTracker
     x_shifted4 = self.x4 - x_pivot
     y_shifted4 = self.y4 - y_pivot
 
+    # Used to update x and y later in the code
     x1_old = self.x1
     y1_old = self.y1
 
@@ -192,6 +196,7 @@ module QuadCameraTracker
     self.x4 = x_pivot + (x_shifted4 * Math.cos(@angle) - y_shifted4 * Math.sin(@angle))
     self.y4 = y_pivot + (x_shifted4 * Math.sin(@angle) + y_shifted4 * Math.cos(@angle))
 
+    # Updates x and y to be on the origin correctly
     @x += -x1_old + self.x1
     @y += -y1_old + self.y1
   end
