@@ -146,16 +146,15 @@ update do
   @squares.each do |square|
     square.update(Camera.camera_position, Camera.zoom_level)
   end
-  @quad.x += 1
+  @quad.rotate(50 - @quad.x,50 - @quad.y,5)
   @quad.color = 'random' if @frame.zero?
   # Alternating between follow and manual control
-  puts @player.x
-  puts @player.y
   if @is_follow
     Camera.follow @player
   else
     Camera.move_by(@cam_x_move, @cam_y_move)
   end
+  @player.rotate(@player.x1, @player.y1, 5)
 
   # This function will teleport the camera directory to those coordinates
   # It is used by Camera.follow but you can use it yourself too!

@@ -35,9 +35,8 @@ module QuadCameraTracker
   def height
     [@y1, @y2, @y3, @y4].max - [@y1, @y2, @y3, @y4].min
   end
-
   def x
-    @x ||= 0
+    @x ||= @x1 / Camera.zoom_level + Camera.camera_position[0]
   end
 
   def x=(x)
@@ -50,7 +49,7 @@ module QuadCameraTracker
   end
 
   def y
-    @y ||= 0
+    @y ||= @y1 / Camera.zoom_level + Camera.camera_position[1]
   end
 
   def y=(y)
@@ -159,15 +158,41 @@ module QuadCameraTracker
     # apply rotation/translation/zoom then pass to super
   end
 
+  attr_writer :rotation_degrees
+
   def rotation_degrees
     @rotation_degrees ||= 0
   end
 
-  def rotate_degrees_by(degrees)
-    # offset rotation to shape
-  end
+  def rotate(x_pivot, y_pivot, angle)
+    self.rotation_degrees += angle
+    self.rotation_degrees %= 360
+    @angle = (Math::PI * angle) / 180
+    x_shifted1 = self.x1 - x_pivot
+    y_shifted1 = self.y1 - y_pivot
+    x_shifted2 = self.x2 - x_pivot
+    y_shifted2 = self.y2 - y_pivot
+    x_shifted3 = self.x3 - x_pivot
+    y_shifted3 = self.y3 - y_pivot
+    x_shifted4 = self.x4 - x_pivot
+    y_shifted4 = self.y4 - y_pivot
 
-  def rotate_degree_to(degrees)
-    # set rotation
+    x1_old = self.x1
+    y1_old = self.y1
+
+    self.x1 = x_pivot + (x_shifted1 * Math.cos(@angle) - y_shifted1 * Math.sin(@angle))
+    self.y1 = y_pivot + (x_shifted1 * Math.sin(@angle) + y_shifted1 * Math.cos(@angle))
+
+    self.x2 = x_pivot + (x_shifted2 * Math.cos(@angle) - y_shifted2 * Math.sin(@angle))
+    self.y2 = y_pivot + (x_shifted2 * Math.sin(@angle) + y_shifted2 * Math.cos(@angle))
+
+    self.x3 = x_pivot + (x_shifted3 * Math.cos(@angle) - y_shifted3 * Math.sin(@angle))
+    self.y3 = y_pivot + (x_shifted3 * Math.sin(@angle) + y_shifted3 * Math.cos(@angle))
+
+    self.x4 = x_pivot + (x_shifted4 * Math.cos(@angle) - y_shifted4 * Math.sin(@angle))
+    self.y4 = y_pivot + (x_shifted4 * Math.sin(@angle) + y_shifted4 * Math.cos(@angle))
+
+    @x += -x1_old + self.x1
+    @y += -y1_old + self.y1
   end
 end
