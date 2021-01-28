@@ -165,7 +165,7 @@ update do
   @squares.each do |square|
     square.update(Camera.camera_position, Camera.zoom_level)
   end
-  @quad.rotate(50 - @quad.x,50 - @quad.y,30) if @frame.zero?
+  @quad.rotate_relative(50 - @quad.x,50 - @quad.y,1)
   @quad.color = 'random' if @frame.zero?
   puts @quad.rotation_degrees
   # Alternating between follow and manual control
@@ -174,7 +174,10 @@ update do
   else
     Camera.move_by(@cam_x_move, @cam_y_move)
   end
-  @player.rotate(0, 0, 5)
+  puts Math.cos(Math::PI * @player.rotation_degrees.to_f / 180)
+  @player.rotate_relative(Math.cos(Math::PI * (@player.rotation_degrees + 1 * 180 / 4) / 180) * (10 * 1.41421356237),
+                          Math.cos(Math::PI * (@player.rotation_degrees - 1 * 180 / 4) / 180) * (10 * 1.41421356237),
+                          2)
 
   # This function will teleport the camera directory to those coordinates
   # It is used by Camera.follow but you can use it yourself too!
@@ -184,6 +187,7 @@ update do
   @ui_pos.text = "Camera Position: #{Camera.camera_position[0].round(1)}, #{Camera.camera_position[1].round(1)}"
   @ui_zoom.text = "Zoom: #{Camera.zoom_level.round(3)}"
   @ui_fps.text = "FPS: #{Window.fps.round(2)}"
+  @ui_rotation.text = "Angle: #{@player.rotation_degrees.round(-1)}"
 end
 
 show

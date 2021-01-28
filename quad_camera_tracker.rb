@@ -1,26 +1,51 @@
 # frozen_string_literal: true
 
 module QuadCameraTracker
-  def update(zoom: 1, x: 0, y: 0)
-    if x != 0 or y != 0
-      @x1 -= x
-      @x2 -= x
-      @x3 -= x
-      @x4 -= x
-      @y1 -= y
-      @y2 -= y
-      @y3 -= y
-      @y4 -= y
+  def update(options = {})
+    if options[:x] and options[:y]
+      @x1 -= options[:x]
+      @x2 -= options[:x]
+      @x3 -= options[:x]
+      @x4 -= options[:x]
+      @y1 -= options[:y]
+      @y2 -= options[:y]
+      @y3 -= options[:y]
+      @y4 -= options[:y]
     end
-    if zoom != 1
-      @x1 *= zoom
-      @x2 *= zoom
-      @x3 *= zoom
-      @x4 *= zoom
-      @y1 *= zoom
-      @y2 *= zoom
-      @y3 *= zoom
-      @y4 *= zoom
+    if options[:zoom]
+      @x1 *= options[:zoom]
+      @x2 *= options[:zoom]
+      @x3 *= options[:zoom]
+      @x4 *= options[:zoom]
+      @y1 *= options[:zoom]
+      @y2 *= options[:zoom]
+      @y3 *= options[:zoom]
+      @y4 *= options[:zoom]
+    end
+    if options[:rotate]
+      x_pivot = Camera.camera_position_x - x
+      y_pivot = Camera.camera_position_y - y
+      calc_angle = (Math::PI * angle) / 180
+      x_shifted1 = x1 - x_pivot
+      y_shifted1 = y1 - y_pivot
+      x_shifted2 = x2 - x_pivot
+      y_shifted2 = y2 - y_pivot
+      x_shifted3 = x3 - x_pivot
+      y_shifted3 = y3 - y_pivot
+      x_shifted4 = x4 - x_pivot
+      y_shifted4 = y4 - y_pivot
+
+      self.x1 = x_pivot + (x_shifted1 * Math.cos(calc_angle) - y_shifted1 * Math.sin(calc_angle))
+      self.y1 = y_pivot + (x_shifted1 * Math.sin(calc_angle) + y_shifted1 * Math.cos(calc_angle))
+
+      self.x2 = x_pivot + (x_shifted2 * Math.cos(calc_angle) - y_shifted2 * Math.sin(calc_angle))
+      self.y2 = y_pivot + (x_shifted2 * Math.sin(calc_angle) + y_shifted2 * Math.cos(calc_angle))
+
+      self.x3 = x_pivot + (x_shifted3 * Math.cos(calc_angle) - y_shifted3 * Math.sin(calc_angle))
+      self.y3 = y_pivot + (x_shifted3 * Math.sin(calc_angle) + y_shifted3 * Math.cos(calc_angle))
+
+      self.x4 = x_pivot + (x_shifted4 * Math.cos(calc_angle) - y_shifted4 * Math.sin(calc_angle))
+      self.y4 = y_pivot + (x_shifted4 * Math.sin(calc_angle) + y_shifted4 * Math.cos(calc_angle))
     end
   end
 
@@ -167,10 +192,10 @@ module QuadCameraTracker
     @rotation_degrees ||= 0
   end
 
-  def rotate(x_pivot, y_pivot, angle)
+  def rotate_relative(x_pivot, y_pivot, angle)
     self.rotation_degrees += angle
     self.rotation_degrees %= 360
-    @angle = (Math::PI * angle) / 180
+    calc_angle = (Math::PI * angle) / 180
     x_shifted1 = self.x1 - x_pivot
     y_shifted1 = self.y1 - y_pivot
     x_shifted2 = self.x2 - x_pivot
@@ -184,20 +209,24 @@ module QuadCameraTracker
     x1_old = self.x1
     y1_old = self.y1
 
-    self.x1 = x_pivot + (x_shifted1 * Math.cos(@angle) - y_shifted1 * Math.sin(@angle))
-    self.y1 = y_pivot + (x_shifted1 * Math.sin(@angle) + y_shifted1 * Math.cos(@angle))
+    self.x1 = x_pivot + (x_shifted1 * Math.cos(calc_angle) - y_shifted1 * Math.sin(calc_angle))
+    self.y1 = y_pivot + (x_shifted1 * Math.sin(calc_angle) + y_shifted1 * Math.cos(calc_angle))
 
-    self.x2 = x_pivot + (x_shifted2 * Math.cos(@angle) - y_shifted2 * Math.sin(@angle))
-    self.y2 = y_pivot + (x_shifted2 * Math.sin(@angle) + y_shifted2 * Math.cos(@angle))
+    self.x2 = x_pivot + (x_shifted2 * Math.cos(calc_angle) - y_shifted2 * Math.sin(calc_angle))
+    self.y2 = y_pivot + (x_shifted2 * Math.sin(calc_angle) + y_shifted2 * Math.cos(calc_angle))
 
-    self.x3 = x_pivot + (x_shifted3 * Math.cos(@angle) - y_shifted3 * Math.sin(@angle))
-    self.y3 = y_pivot + (x_shifted3 * Math.sin(@angle) + y_shifted3 * Math.cos(@angle))
+    self.x3 = x_pivot + (x_shifted3 * Math.cos(calc_angle) - y_shifted3 * Math.sin(calc_angle))
+    self.y3 = y_pivot + (x_shifted3 * Math.sin(calc_angle) + y_shifted3 * Math.cos(calc_angle))
 
-    self.x4 = x_pivot + (x_shifted4 * Math.cos(@angle) - y_shifted4 * Math.sin(@angle))
-    self.y4 = y_pivot + (x_shifted4 * Math.sin(@angle) + y_shifted4 * Math.cos(@angle))
+    self.x4 = x_pivot + (x_shifted4 * Math.cos(calc_angle) - y_shifted4 * Math.sin(calc_angle))
+    self.y4 = y_pivot + (x_shifted4 * Math.sin(calc_angle) + y_shifted4 * Math.cos(calc_angle))
 
     # Updates x and y to be on the origin correctly
     @x += -x1_old + self.x1
     @y += -y1_old + self.y1
+  end
+
+  def rotate(angle)
+    rotate_relative(0, 0, angle)
   end
 end
