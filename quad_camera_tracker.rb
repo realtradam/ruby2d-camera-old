@@ -23,9 +23,9 @@ module QuadCameraTracker
       @y4 *= options[:zoom]
     end
     if options[:rotate]
-      x_pivot = Camera.camera_position_x - x
-      y_pivot = Camera.camera_position_y - y
-      calc_angle = (Math::PI * angle) / 180
+      x_pivot = -x
+      y_pivot = -y
+      calc_angle = (Math::PI * options[:rotate]) / 180
       x_shifted1 = x1 - x_pivot
       y_shifted1 = y1 - y_pivot
       x_shifted2 = x2 - x_pivot
@@ -49,8 +49,12 @@ module QuadCameraTracker
     end
   end
 
-  def true_center
-    [[@x1, @x2, @x3, @x4].min, [@y1, @y2, @y3, @y4].min]
+  # Uses a 'fast' method of getting the center
+  # perfectly accurate for squares and rectangles
+  # may be inaccurate for other quadrilaterals
+  def lazy_center
+    [([@x1, @x2, @x3, @x4].min + [@x1, @x2, @x3, @x4].max) / 2,
+     ([@y1, @y2, @y3, @y4].min + [@y1, @y2, @y3, @y4].max) / 2]
   end
 
   def width
@@ -94,6 +98,10 @@ module QuadCameraTracker
   def size=(size)
     # should resize based on the top left point
     # offset rotation to shape
+  end
+
+  def x1_debug
+    @x1
   end
 
   def x1

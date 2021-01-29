@@ -41,12 +41,15 @@ class Camera
     @rotation_degrees ||= 0
   end
 
-  def self.rotate_degrees_by(degrees)
+  def self.rotate_by(degrees)
     # offset rotation to world
-  end
-
-  def self.rotate_degree_to(degrees)
-    # set rotation
+    objects.each do |object|
+      unless object.is_a?(Image) or object.is_a?(AnimatedSquare)
+        object.update(rotate: degrees)
+      end
+    end
+    self.rotation_degrees += degrees
+    self.rotation_degrees %= 360
   end
 
   def self.zoom_by(zoom)
@@ -69,8 +72,10 @@ class Camera
   end
 
   def self.follow(item)
-    move_to(((item.true_center[0] + item.width / 2) - (Window.width / 2)) / elasticity,
-            ((item.true_center[1] + item.height / 2) - (Window.height / 2)) / elasticity)
+    move_by(((item.x - camera_position_x - (Window.width / 2) / zoom_level) /
+             (elasticity / (zoom_level * zoom_level))),
+            ((item.y - camera_position_y - (Window.height / 2) / zoom_level) /
+             (elasticity / (zoom_level * zoom_level))))
   end
 
   def self.objects
@@ -102,8 +107,20 @@ class Camera
     self.camera_position_x += x / zoom_level
     self.camera_position_y += y / zoom_level
   end
-
+# SOMETHING MESSED UP
+  # with the camera position thing
   def self.move_to(x, y)
+    objects.each do |object|
+      if object.is_a?(Image) or object.is_a?(AnimatedSquare)
+        object.x -= object.x + x
+        object.y -= object.y + y
+      else
+        object.update(x: -Camera.camera_position_x + x, y: -Camera.camera_position_y + y)
+      end
+    end
+    self.camera_position_x = x / zoom_level
+    self.camera_position_y = y / zoom_level
+=begin
     self.camera_position_x = x / zoom_level + camera_position[0]
     self.camera_position_y = y / zoom_level + camera_position[1]
     objects.each do |object|
@@ -114,5 +131,6 @@ class Camera
         object.update(x: x, y: y)
       end
     end
+=end
   end
 end
