@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ruby2d'
+#require 'ruby2d'
 require_relative 'camera'
 require_relative 'animator'
 
@@ -189,9 +189,9 @@ end
                  x4: 0, y4: 20)
 Camera << @quad
 @frame = 0
-  @player.rotate_relative(-@player.x,
-                          -@player.y,
-                          -12)
+@player.rotate_relative(-@player.x,
+                        -@player.y,
+                        -12)
 update do
   @frame += 1
   @frame %= 60

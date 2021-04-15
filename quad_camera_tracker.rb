@@ -105,13 +105,21 @@ module QuadCameraTracker
   end
 
   def x1
-    @x1 / Camera.zoom_level + Camera.camera_position[0] - x
+    temp_angle = (Math::PI * -Camera.rotation_degrees) / 180
+    rotatedx = (@x1 * Math.cos(temp_angle) - @y1 * Math.sin(temp_angle))
+
+    #rotatedx / Camera.zoom_level + Camera.camera_position[0] - x
+    temp_move_x = @x1 / Camera.zoom_level + Camera.camera_position[0] - x
+    temp_move_y = @y1 / Camera.zoom_level + Camera.camera_position[1] - y
+    temp_move_x * Math.cos(temp_angle) - temp_move_y * Math.sin(temp_angle)
+    #@y = (x_shifted * Math.sin(@angle) + @y1 * Math.cos(@angle))
     # undo rotation/translation/zoom
   end
 
   # Should modify the x1 methods so they move everything else isntead
   # this is so that x1 is always the "origin" aka 0,0 of the shape
   def x1=(x1)
+    temp_angle = (Math::PI * -Camera.rotation_degrees) / 180
     @x1 = ((x1 + x) - Camera.camera_position[0]) * Camera.zoom_level
     # add rotation level
     # apply rotation/translation/zoom then pass to super
