@@ -25,12 +25,12 @@ module AdaptTriangle
 
   def _update
     angle = Camera.angle * (Math::PI / 180)
-    @x1 = ((x + x1 + Camera.x) * Math.cos(angle)) - ((y + y1 + Camera.y) * Math.sin(angle))
-    @y1 = ((x + x1 + Camera.x) * Math.sin(angle)) + ((y + y1 + Camera.y) * Math.cos(angle))
-    @x2 = ((x + x2 + Camera.x) * Math.cos(angle)) - ((y + y2 + Camera.y) * Math.sin(angle))
-    @y2 = ((x + x2 + Camera.x) * Math.sin(angle)) + ((y + y2 + Camera.y) * Math.cos(angle))
-    @x3 = ((x + x3 + Camera.x) * Math.cos(angle)) - ((y + y3 + Camera.y) * Math.sin(angle))
-    @y3 = ((x + x3 + Camera.x) * Math.sin(angle)) + ((y + y3 + Camera.y) * Math.cos(angle))
+    @x1 = (((x + x1 - Camera.x) * Math.cos(angle)) - ((y + y1 - Camera.y) * Math.sin(angle))) * Camera.zoom
+    @y1 = (((x + x1 - Camera.x) * Math.sin(angle)) + ((y + y1 - Camera.y) * Math.cos(angle))) * Camera.zoom
+    @x2 = (((x + x2 - Camera.x) * Math.cos(angle)) - ((y + y2 - Camera.y) * Math.sin(angle))) * Camera.zoom
+    @y2 = (((x + x2 - Camera.x) * Math.sin(angle)) + ((y + y2 - Camera.y) * Math.cos(angle))) * Camera.zoom
+    @x3 = (((x + x3 - Camera.x) * Math.cos(angle)) - ((y + y3 - Camera.y) * Math.sin(angle))) * Camera.zoom
+    @y3 = (((x + x3 - Camera.x) * Math.sin(angle)) + ((y + y3 - Camera.y) * Math.cos(angle))) * Camera.zoom
   end
 
   def _x1

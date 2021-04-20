@@ -40,25 +40,31 @@ end
 Camera << @player
 Rectangle.new(
   width: 350,
-  height: 105,
+  height: 135,
   color: 'navy'
 )
-@ui_pos = Text.new(
+@ui_pos_cam = Text.new(
   'pos: 0,0',
   x: 10,
   y: 10,
   color: 'teal'
 )
+@ui_pos_ply = Text.new(
+  'pos: 0,0',
+  x: 10,
+  y: 40,
+  color: 'teal'
+)
 @ui_zoom = Text.new(
   'zoom: 0',
   x: 10,
-  y: 40,
+  y: 70,
   color: 'lime'
 )
 @ui_rotation = Text.new(
   'rotation: 0',
   x: 10,
-  y: 70,
+  y: 100,
   color: 'lime'
 )
 Rectangle.new(
@@ -146,12 +152,8 @@ on :key do |event|
     Camera.angle -= 1
   end
   if event.key == 'r'
-    Camera.angle = 0
-    #unless Camera.rotation_degrees.zero?
-    #Camera.rotate_by(-Camera.rotation_degrees)
-    #Camera.move_to(@player.lazy_center[0] - (Window.width / 2),
-    #               @player.lazy_center[1] - (Window.height / 2))
-    #end
+    Camera.angle = 0.0
+    Camera.zoom = 1.0
   end
 end
 update do
@@ -159,29 +161,26 @@ update do
   @player.y += @y_move
   @x_move = 0
   @y_move = 0
+  Camera.zoom *= @zoom_by
 
   if @is_follow
-    Camera.x = @player.x
-    Camera.y = @player.y
+    #Camera.center(@player.x, @player.y)
+    Camera.center_x = @player.x
+    Camera.center_y = @player.y
   else
     Camera.x += @cam_x_move
     Camera.y += @cam_y_move
   end
   @cam_x_move = 0
   @cam_y_move = 0
-  @ui_pos.text = "Camera Position: #{Camera.x.round(1)}, #{Camera.y.round(1)}"
-  @ui_zoom.text = "Zoom: 'N/A'" #{Camera.zoom_level.round(3)}"
+  @zoom_by = 1
+  @ui_pos_cam.text = "Camera Position: #{Camera.center_x.round(1)}, #{Camera.center_y.round(1)}"
+  @ui_pos_ply.text = "Player Position: #{@player.x.round(1)}, #{@player.y.round(1)}"
+  @ui_zoom.text = "Zoom: #{Camera.zoom.round(3)}"
   @ui_fps.text = "FPS: #{Window.fps.round(2)}"
   @ui_rotation.text = "Angle: #{Camera.angle}"
-=begin
-  puts 'player position'
   puts @player.x
   puts @player.y
-  puts 'camera position'
-  puts "y:     #{Camera.y}"
-  puts "x:     #{Camera.x}"
-=end
-
 end
 
 show
