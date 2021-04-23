@@ -15,7 +15,7 @@ module Camera
     item.extend AdaptTriangle if item.is_a? Triangle
     objects.push(item) unless objects.include?(item)
   end
-
+=begin
   def self.center_x
     x + ((Window.width / 2) * (1/zoom))
   end
@@ -50,11 +50,12 @@ module Camera
     objects.each(&:_update)
   end
 =end
+
   def self._x(x)
     @x += x
     objects.each(&:_update)
   end
-  
+
   def self._y(y)
     @y += y
     objects.each(&:_update)
@@ -65,9 +66,9 @@ module Camera
   end
 
   def self.x=(x)
-    angle = Camera.angle * (Math::PI / 180)
-    @y += (x - self.x) * Math.sin(-angle)
-    @x += (x - self.x) * Math.cos(-angle)
+    #angle = Camera.angle * (Math::PI / 180)
+    #@y += (x - self.x) * Math.sin(-angle)
+    @x = x#+= (x - self.x) * Math.cos(-angle)
     objects.each(&:_update)
   end
 
@@ -76,9 +77,9 @@ module Camera
   end
 
   def self.y=(y)
-    angle = Camera.angle * (Math::PI / 180)
-    @x += -(y - self.y) * Math.sin(-angle)
-    @y += (y - self.y) * Math.cos(-angle)
+    #angle = Camera.angle * (Math::PI / 180)
+    #@x += -(y - self.y) * Math.sin(-angle)
+    @y = y#+= (y - self.y) * Math.cos(-angle)
     objects.each(&:_update)
   end
 
@@ -88,12 +89,7 @@ module Camera
 
   def self.zoom=(zoom)
     if zoom != self.zoom
-      shift = (Window.width - Window.height) / 2
-      #temp = [center_x, center_y]
-      temp = [0, center_y]
       @zoom = zoom
-      self.center_x = temp[0]
-      self.center_y = temp[1]
       objects.each(&:_update)
     end
   end

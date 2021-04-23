@@ -180,38 +180,21 @@ update do
   Camera.zoom *= @zoom_by
 
   if @is_follow
-    #Camera.center(@player.x, @player.y)
-    Camera.center_x = @player.x
-    Camera.center_y = @player.y
+    Camera.x = @player.x
+    Camera.y = @player.y
   else
-    Camera.x += @cam_x_move
-    Camera.y += @cam_y_move
+    angle = Camera.angle * (Math::PI / 180)
+    Camera.x += (@cam_x_move * Math.cos(-angle)) - (@cam_y_move * Math.sin(-angle))
+    Camera.y += (@cam_x_move * Math.sin(-angle)) + (@cam_y_move * Math.cos(-angle))
   end
   @cam_x_move = 0
   @cam_y_move = 0
   @zoom_by = 1
-  @ui_pos_cam.text = "Camera Position: #{Camera.center_x.round(1)}, #{Camera.center_y.round(1)}"
+  @ui_pos_cam.text = "Camera Position: #{Camera.x.round(1)}, #{Camera.y.round(1)}"
   @ui_pos_ply.text = "Player Position: #{@player.x.round(1)}, #{@player.y.round(1)}"
   @ui_zoom.text = "Zoom: #{Camera.zoom.round(3)}"
   @ui_fps.text = "FPS: #{Window.fps.round(2)}"
   @ui_rotation.text = "Angle: #{Camera.angle}"
-  angle = Math::PI / 180 * Camera.angle
-  Camera._x((Math.cos(angle + (3 * Math::PI / 4)) * 0.7 + 0.5) * Window.height )#* (1/Camera.zoom))
-  Camera._y((Math.cos(angle - (3 * Math::PI / 4)) * 0.7 + 0.5) * Window.height )#* (1/Camera.zoom))
-  shift = (Window.width - Window.height) / 2
-  Camera._x(shift )#* (Camera.zoom / 1))
-
-
-  Camera._x(-shift * Math.cos(-angle) )#* (1/Camera.zoom))
-  Camera._y(-shift * Math.sin(-angle) )#* (1/Camera.zoom))
-  Camera._x(-Window.width.to_f * 0.5 * ((1/Camera.zoom) - 1))
-  Camera._y(-Window.height.to_f * 0.5 * ((1/Camera.zoom) - 1))
-  puts 'debug x'
-  puts Camera.x
-  puts @debug1
-  puts 'debug y'
-  puts Camera.y
-  puts @debug3
 end
 
 show

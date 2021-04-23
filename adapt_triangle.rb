@@ -2,6 +2,7 @@
 
 module AdaptTriangle
 
+=begin
   def _translate_x(x)
     @x1 += x
     @x2 += x
@@ -22,7 +23,7 @@ module AdaptTriangle
     @x3 = ((@x3) * Math.cos(angle)) - ((@y3) * Math.sin(angle))
     @y3 = ((@x3) * Math.sin(angle)) + ((@y3) * Math.cos(angle))
   end
-
+=end
   def _update
     angle = Camera.angle * (Math::PI / 180)
     @x1 = (((x + x1 - Camera.x) * Math.cos(angle)) - ((y + y1 - Camera.y) * Math.sin(angle))) * Camera.zoom
@@ -31,6 +32,15 @@ module AdaptTriangle
     @y2 = (((x + x2 - Camera.x) * Math.sin(angle)) + ((y + y2 - Camera.y) * Math.cos(angle))) * Camera.zoom
     @x3 = (((x + x3 - Camera.x) * Math.cos(angle)) - ((y + y3 - Camera.y) * Math.sin(angle))) * Camera.zoom
     @y3 = (((x + x3 - Camera.x) * Math.sin(angle)) + ((y + y3 - Camera.y) * Math.cos(angle))) * Camera.zoom
+    width = Window.width * 0.5
+    height = Window.height * 0.5
+    @x1 += width
+    @x2 += width
+    @x3 += width
+    @y1 += height
+    @y2 += height
+    @y3 += height
+
   end
 
   def _x1
@@ -46,10 +56,6 @@ module AdaptTriangle
   end
 
   def x=(x)
-    #diff = x - self.x
-    #self.x1 += diff
-    #self.x2 += diff
-    #self.x3 += diff
     @x = x
     _update
   end
@@ -59,39 +65,27 @@ module AdaptTriangle
   end
 
   def y=(y)
-    #diff = y - self.y
-    #self.y1 += diff
-    #self.y2 += diff
-    #self.y3 += diff
     @y = y
   end
 
   #undo rotation
   def x1
     @virtual_x1 ||= @x1
-    #(@x1 * Math.cos(-Camera.angle)) - (@y1 * Math.sin(-Camera.angle)) - Camera.x
   end
 
   #difference between 'x1' and undone rotation > then rotated
   def x1=(x1)
     @virtual_x1 = x1
     _update
-    #temp = self.x1
-    #@x1 += ((x1 - temp) * Math.cos(Camera.angle))
-    #@y1 += ((x1 - temp) * Math.sin(Camera.angle))
   end
 
   def y1
     @virtual_y1 ||= @y1
-    #(@x1 * Math.sin(-Camera.angle)) + (@y1 * Math.cos(-Camera.angle)) - Camera.y
   end
 
   def y1=(y1)
     @virtual_y1 = y1
     _update
-    #temp = self.y1
-    #@x1 += -((y1 - temp) * Math.sin(Camera.angle))
-    #@y1 += ((y1 - temp) * Math.cos(Camera.angle))
   end
 
   def x2
