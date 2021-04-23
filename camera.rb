@@ -21,18 +21,19 @@ module Camera
   end
 
   def self.center_x=(center_x)
-    @x = center_x - ((Window.width / 2) * (1/zoom))
+    @x = center_x - ((Window.width / 2) )#* (1/zoom))
     objects.each(&:_update)
   end
 
   def self.center_y
-    y + ((Window.height / 2) * (1/zoom))
+    y + ((Window.height / 2) )#* (1/zoom))
   end
 
   def self.center_y=(center_y)
-    @y = center_y - ((Window.height / 2) * (1/zoom))
+    @y = center_y - ((Window.height / 2) )#* (1/zoom))
     objects.each(&:_update)
   end
+=begin
   def self.center(center_x, center_y)
     self.center_y = center_y
     self.center_x = center_y
@@ -48,6 +49,17 @@ module Camera
     #@y = y + ((pivot_x - x) * Math.sin(angle)) + ((pivot_y - y) * Math.cos(angle))
     objects.each(&:_update)
   end
+=end
+  def self._x(x)
+    @x += x
+    objects.each(&:_update)
+  end
+  
+  def self._y(y)
+    @y += y
+    objects.each(&:_update)
+  end
+
   def self.x
     @x ||= 0
   end
@@ -76,7 +88,9 @@ module Camera
 
   def self.zoom=(zoom)
     if zoom != self.zoom
-      temp = [center_x, center_y]
+      shift = (Window.width - Window.height) / 2
+      #temp = [center_x, center_y]
+      temp = [0, center_y]
       @zoom = zoom
       self.center_x = temp[0]
       self.center_y = temp[1]

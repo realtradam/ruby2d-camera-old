@@ -3,6 +3,8 @@
 require 'ruby2d'
 require_relative 'camera'
 
+#set width: 700, height: 300
+
 # Use this to add a few extra methods to an Image
 module SizableImage
   def size
@@ -92,8 +94,18 @@ Rectangle.new(
 @cam_y_move = 0
 @is_follow = true
 @zoom_by = 1
+@debug1 = 0
+@debug2 = 0
+@debug4 = 0
+@debug3 = 0
 
 on :key do |event|
+  if event.key == 't'
+    @debug3 += 2
+  end
+  if event.key == 'g'
+    @debug3 -= 2
+  end
   if event.key == 'a'
     @y_move += 0
     @x_move += -@speed
@@ -127,7 +139,11 @@ on :key do |event|
     @is_follow = false
   end
   if event.key == 'f'
-    @is_follow = true
+    @debug1 += 2
+    #@is_follow = true
+  end
+  if event.key == 'h'
+    @debug1 -= 2
   end
 end
 
@@ -146,10 +162,10 @@ on :key do |event|
   end
 
   if event.key == 'q'
-    Camera.angle += 1
+    Camera.angle += 2
   end
   if event.key == 'e'
-    Camera.angle -= 1
+    Camera.angle -= 2
   end
   if event.key == 'r'
     Camera.angle = 0.0
@@ -179,8 +195,23 @@ update do
   @ui_zoom.text = "Zoom: #{Camera.zoom.round(3)}"
   @ui_fps.text = "FPS: #{Window.fps.round(2)}"
   @ui_rotation.text = "Angle: #{Camera.angle}"
-  puts @player.x
-  puts @player.y
+  angle = Math::PI / 180 * Camera.angle
+  Camera._x((Math.cos(angle + (3 * Math::PI / 4)) * 0.7 + 0.5) * Window.height )#* (1/Camera.zoom))
+  Camera._y((Math.cos(angle - (3 * Math::PI / 4)) * 0.7 + 0.5) * Window.height )#* (1/Camera.zoom))
+  shift = (Window.width - Window.height) / 2
+  Camera._x(shift )#* (Camera.zoom / 1))
+
+
+  Camera._x(-shift * Math.cos(-angle) )#* (1/Camera.zoom))
+  Camera._y(-shift * Math.sin(-angle) )#* (1/Camera.zoom))
+  Camera._x(-Window.width.to_f * 0.5 * ((1/Camera.zoom) - 1))
+  Camera._y(-Window.height.to_f * 0.5 * ((1/Camera.zoom) - 1))
+  puts 'debug x'
+  puts Camera.x
+  puts @debug1
+  puts 'debug y'
+  puts Camera.y
+  puts @debug3
 end
 
 show
