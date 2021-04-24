@@ -36,9 +36,10 @@ module Camera
     case item
     when Triangle
       item.extend Camera::TriangleWrapped
-      puts item.class
     when Square
       item.extend Camera::SquareWrapped
+    when Rectangle
+      item.extend Camera::RectangleWrapped
     when Quad
       item.extend Camera::QuadWrapped
     when Line
@@ -53,7 +54,7 @@ module Camera
       item.extend Camera::TextWrapped
     else
       puts 'Warning: Non-standard Object added to Camera'
-      puts 'Object may not behave as expected'
+      puts '  Object may not behave as expected'
     end
     objects.push(item) unless objects.include?(item)
   end

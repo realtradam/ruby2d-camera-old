@@ -3,7 +3,7 @@
 module Camera
 # Wraps existing variables as well as adding new methods
 # so that it can be handled by the Camera Module
-  module SquareWrapped
+  module QuadWrapped
     # Recalculates real coordiantes
     # Use after changing variables
     def update
@@ -87,9 +87,8 @@ module Camera
     def y3=(y3)
       @virtual_y3 = y3
     end
-
     def x4
-      @virtual_x4 ||= @x4
+      @virtual_x3 ||= @x3
     end
 
     def x4=(x4)
@@ -102,35 +101,6 @@ module Camera
 
     def y4=(y4)
       @virtual_y4 = y4
-    end
-
-
-    def width
-      @width ||= 200
-    end
-
-    def width=(width)
-      self.x2 = width
-      self.x3 = width
-      @width = width
-    end
-
-    def height
-      @height ||= 100
-    end
-
-    def height=(height)
-      self.y3 = height
-      self.y4 = height
-      @height = height
-    end
-
-    def size
-      @size ||= 100
-    end
-
-    def size=(size)
-      @size = self.width = self.height = size
     end
   end
 end

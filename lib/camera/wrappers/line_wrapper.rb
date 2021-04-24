@@ -3,7 +3,7 @@
 module Camera
 # Wraps existing variables as well as adding new methods
 # so that it can be handled by the Camera Module
-  module SquareWrapped
+  module LineWrapped
     # Recalculates real coordiantes
     # Use after changing variables
     def update
@@ -14,10 +14,7 @@ module Camera
       @y1 = (((x + x1 - Camera.x) * Math.sin(angle)) + ((y + y1 - Camera.y) * Math.cos(angle))) * Camera.zoom + half_height
       @x2 = (((x + x2 - Camera.x) * Math.cos(angle)) - ((y + y2 - Camera.y) * Math.sin(angle))) * Camera.zoom + half_width
       @y2 = (((x + x2 - Camera.x) * Math.sin(angle)) + ((y + y2 - Camera.y) * Math.cos(angle))) * Camera.zoom + half_height
-      @x3 = (((x + x3 - Camera.x) * Math.cos(angle)) - ((y + y3 - Camera.y) * Math.sin(angle))) * Camera.zoom + half_width
-      @y3 = (((x + x3 - Camera.x) * Math.sin(angle)) + ((y + y3 - Camera.y) * Math.cos(angle))) * Camera.zoom + half_height
-      @x4 = (((x + x4 - Camera.x) * Math.cos(angle)) - ((y + y4 - Camera.y) * Math.sin(angle))) * Camera.zoom + half_width
-      @y4 = (((x + x4 - Camera.x) * Math.sin(angle)) + ((y + y4 - Camera.y) * Math.cos(angle))) * Camera.zoom + half_height
+      @width = width * Camera.zoom
     end
 
     #Methods for moving the shape
@@ -72,65 +69,22 @@ module Camera
       @virtual_y2 = y2
     end
 
-    def x3
-      @virtual_x3 ||= @x3
-    end
-
-    def x3=(x3)
-      @virtual_x3 = x3
-    end
-
-    def y3
-      @virtual_y3 ||= @y3
-    end
-
-    def y3=(y3)
-      @virtual_y3 = y3
-    end
-
-    def x4
-      @virtual_x4 ||= @x4
-    end
-
-    def x4=(x4)
-      @virtual_x4 = x4
-    end
-
-    def y4
-      @virtual_y4 ||= @y4
-    end
-
-    def y4=(y4)
-      @virtual_y4 = y4
-    end
-
-
     def width
-      @width ||= 200
+      @virtual_width ||= @width
     end
 
     def width=(width)
-      self.x2 = width
-      self.x3 = width
-      @width = width
+      @virtual_width = width
     end
 
-    def height
-      @height ||= 100
+    def length
+      points_distance(x1, y1, x2, y2)
     end
 
-    def height=(height)
-      self.y3 = height
-      self.y4 = height
-      @height = height
-    end
-
-    def size
-      @size ||= 100
-    end
-
-    def size=(size)
-      @size = self.width = self.height = size
+    def contains?(x, y)
+      points_distance(x1, y1, x, y) <= length &&
+        points_distance(x2, y2, x, y) <= length &&
+        (((y2 - y1) * x - (x2 - x1) * y + x2 * y1 - y2 * x1).abs / length) <= 0.5 * width
     end
   end
 end

@@ -5,6 +5,8 @@ require_relative 'lib/camera/camera'
 
 #set width: 700, height: 300
 
+Window.set(icon: "./assets/blobdanceextract/blob#{(1...20).to_a.sample}.png")
+
 # Use this to add a few extra methods to an Image
 module SizableImage
   def size
@@ -17,17 +19,16 @@ module SizableImage
   end
 end
 
-Window.set(icon: './assets/player.png')
 
 # There is 2 ways you can add objects to be known and controlled by the camera, both do the same thing
 
-@square = Square.new(
-  x: 100, y: 100,
-  size: 125,
-  color: 'random'
-)
+#@square = Square.new(
+#  x: 100, y: 100,
+#  size: 125,
+#  color: 'random'
+#)
 
-Camera << @square
+#Camera << @square
 
 25.times do
   tempx = (0..1920).to_a.sample
@@ -49,14 +50,40 @@ end
   z: -1
 )
 Camera << @background
-@player = Triangle.new(x1: 0,
-                       y1: 0,
-                       x2: 0,
-                       y2: 0 + 25,
-                       x3: 0 + 25,
-                       y3: 0 + 25,
-                       size: (10..50).to_a.sample,
-                       color: 'blue')
+@line = Line.new(x1: -40,
+                 y1: -50,
+                 x2: 60,
+                 y2: 70,
+                 width: 35,
+                 color: 'random')
+Camera << @line
+=begin
+@player = Quad.new(x1: 0,
+                   y1: 0,
+                   x2: 0,
+                   y2: 0 + 25,
+                   x3: 0 + 25,
+                   y3: 0 + 25,
+                   x4: 0 + 25,
+                   y4: 0,
+                   size: (10..50).to_a.sample,
+                   color: 'blue')
+=end
+@player = Square.new(x: 0,
+                     y: 0,
+                     size: 100,
+                     color: 'random')
+@sprite = Sprite.new('./assets/sprites/blob.png',
+                     x: 300,
+                     y: 300,
+                     width: 100,
+                     height: 100,
+                     clip_width: 128,
+                     loop: true,
+                     time: 17)
+Camera << @sprite
+@sprite.play
+Camera << @player
 Camera << @player
 Rectangle.new(
   width: 350,
@@ -154,15 +181,19 @@ end
 on :key_down do |event|
   if event.key == 'f'
     Camera.debug_x += 2
+    @player.size -= 5
   end
   if event.key == 'h'
     Camera.debug_x -= 2
+    @player.size += 5
   end
   if event.key == 't'
     Camera.debug_y += 2
+    @player.height += 5
   end
   if event.key == 'g'
     Camera.debug_y -= 2
+    @player.height -= 5
   end
 end
 
@@ -214,10 +245,7 @@ update do
   @ui_zoom.text = "Zoom: #{Camera.zoom.round(3)}"
   @ui_fps.text = "FPS: #{Window.fps.round(2)}"
   @ui_rotation.text = "Angle: #{Camera.angle}"
-  puts "Debug X"
-  puts Camera.debug_x
-  puts "Debug Y"
-  puts Camera.debug_y
+
   Camera.update
 end
 show
