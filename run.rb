@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'ruby2d'
-require_relative 'camera'
+require_relative 'lib/camera/camera'
 
 #set width: 700, height: 300
 
@@ -17,6 +17,8 @@ module SizableImage
   end
 end
 
+Window.set(icon: './assets/player.png')
+
 # There is 2 ways you can add objects to be known and controlled by the camera, both do the same thing
 25.times do
   tempx = (0..1920).to_a.sample
@@ -31,6 +33,13 @@ end
                          size: (10..50).to_a.sample,
                          color: 'random')
 end
+@background = Image.new(
+  'assets/background.png',
+  x: 0, y: 0,
+  width: (1920 * 0.25), height: (1080 * 0.25),
+  z: -1
+)
+Camera << @background
 @player = Triangle.new(x1: 0,
                        y1: 0,
                        x2: 0,
@@ -38,7 +47,7 @@ end
                        x3: 0 + 25,
                        y3: 0 + 25,
                        size: (10..50).to_a.sample,
-                       color: 'random')
+                       color: 'blue')
 Camera << @player
 Rectangle.new(
   width: 350,
@@ -100,12 +109,6 @@ Rectangle.new(
 @debug3 = 0
 
 on :key do |event|
-  if event.key == 't'
-    @debug3 += 2
-  end
-  if event.key == 'g'
-    @debug3 -= 2
-  end
   if event.key == 'a'
     @y_move += 0
     @x_move += -@speed
@@ -138,12 +141,19 @@ on :key do |event|
     @cam_y_move += @speed
     @is_follow = false
   end
+end
+on :key_down do |event|
   if event.key == 'f'
-    @debug1 += 2
-    #@is_follow = true
+    Camera.debug_x += 2
   end
   if event.key == 'h'
-    @debug1 -= 2
+    Camera.debug_x -= 2
+  end
+  if event.key == 't'
+    Camera.debug_y += 2
+  end
+  if event.key == 'g'
+    Camera.debug_y -= 2
   end
 end
 
@@ -162,10 +172,10 @@ on :key do |event|
   end
 
   if event.key == 'q'
-    Camera.angle += 2
+    Camera.angle -= 2
   end
   if event.key == 'e'
-    Camera.angle -= 2
+    Camera.angle += 2
   end
   if event.key == 'r'
     Camera.angle = 0.0
@@ -195,6 +205,10 @@ update do
   @ui_zoom.text = "Zoom: #{Camera.zoom.round(3)}"
   @ui_fps.text = "FPS: #{Window.fps.round(2)}"
   @ui_rotation.text = "Angle: #{Camera.angle}"
+  puts "Debug X"
+  puts Camera.debug_x
+  puts "Debug Y"
+  puts Camera.debug_y
+  Camera.update
 end
-
 show
