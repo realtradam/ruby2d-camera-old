@@ -6,7 +6,7 @@ module Camera
   module TriangleWrapped
     # Recalculates real coordiantes
     # Use after changing variables
-    def update
+    def redraw
       angle = Camera.angle * (Math::PI / 180)
       half_width = Window.width * 0.5
       half_height = Window.height * 0.5

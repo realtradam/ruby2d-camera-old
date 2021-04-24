@@ -61,8 +61,8 @@ module Camera
 
   # Redraw all objects that
   # are tracked by the Camera
-  def self.update
-    objects.each(&:update)
+  def self.redraw
+    objects.each(&:redraw)
   end
 
   # Variables changing Camera properties

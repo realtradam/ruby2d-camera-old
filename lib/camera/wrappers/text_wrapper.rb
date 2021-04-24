@@ -3,7 +3,7 @@
 module Camera
   # Wraps existing variables as well as adding new methods
   # so that it can be handled by the Camera Module
-  module ImageWrapped
+  module TextWrapped
     # Recalculates real coordiantes
     # Use after changing variables
     def redraw
@@ -17,8 +17,7 @@ module Camera
       @y = (((offset_x - Camera.x) * Math.sin(angle)) + ((offset_y - Camera.y) * Math.cos(angle))) \
         * Camera.zoom + half_height - (height * Camera.zoom / 2)
       @rotate = rotate + Camera.angle
-      @width = width * Camera.zoom
-      @height = height * Camera.zoom
+      @size = size * Camera.zoom
     end
 
     #Methods for moving the shape
@@ -54,20 +53,12 @@ module Camera
       @virtual_rotate = rotate
     end
 
-    def width
-      @virtual_width ||= @width
+    def size
+      @virtual_size ||= @size
     end
 
-    def width=(width)
-      @virtual_width = width
-    end
-
-    def height
-      @virtual_height ||= @height
-    end
-
-    def height=(height)
-      @virtual_height = height
+    def size=(size)
+      @virtual_size = size
     end
   end
 end

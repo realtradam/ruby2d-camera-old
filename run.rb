@@ -5,44 +5,10 @@ require_relative 'lib/camera/camera'
 
 #set width: 700, height: 300
 
-Window.set(icon: "./assets/blobdanceextract/blob#{(1...20).to_a.sample}.png")
+Window.set(icon: './assets/blobcoolthink.png',
+           width: 1280,
+           height: 720)
 
-# Use this to add a few extra methods to an Image
-module SizableImage
-  def size
-    width
-  end
-
-  def size=(size)
-    self.height *= (size / width)
-    self.width *= (size / width)
-  end
-end
-
-
-# There is 2 ways you can add objects to be known and controlled by the camera, both do the same thing
-
-#@square = Square.new(
-#  x: 100, y: 100,
-#  size: 125,
-#  color: 'random'
-#)
-
-#Camera << @square
-
-25.times do
-  tempx = (0..1920).to_a.sample
-  tempy = (0..1080).to_a.sample
-  tempsize = (25..100).to_a.sample
-  Camera << Triangle.new(x1: tempx,
-                         y1: tempy,
-                         x2: tempx,
-                         y2: tempy + tempsize,
-                         x3: tempx + tempsize,
-                         y3: tempy + tempsize,
-                         size: (10..50).to_a.sample,
-                         color: 'random')
-end
 @background = Image.new(
   'assets/background.png',
   x: 0, y: 0,
@@ -68,12 +34,20 @@ Camera << @line
                    y4: 0,
                    size: (10..50).to_a.sample,
                    color: 'blue')
-=end
 @player = Square.new(x: 0,
                      y: 0,
                      size: 100,
                      color: 'random')
-@sprite = Sprite.new('./assets/sprites/blob.png',
+=end
+@player = Sprite.new('./assets/sprites/blobdance.png',
+                     x: 0,
+                     y: 0,
+                     width: 50,
+                     height: 50,
+                     clip_width: 128,
+                     loop: true,
+                     time: 17)
+@sprite = Sprite.new('./assets/sprites/blobdance.png',
                      x: 300,
                      y: 300,
                      width: 100,
@@ -83,6 +57,11 @@ Camera << @line
                      time: 17)
 Camera << @sprite
 @sprite.play
+@player.play
+@text = Text.new('Hello',
+                 x: 150, y: 150,
+                 size: 20)
+Camera << @text
 Camera << @player
 Camera << @player
 Rectangle.new(
@@ -180,20 +159,15 @@ on :key do |event|
 end
 on :key_down do |event|
   if event.key == 'f'
-    Camera.debug_x += 2
-    @player.size -= 5
+    @player.flip_sprite(:vertical)
   end
   if event.key == 'h'
-    Camera.debug_x -= 2
-    @player.size += 5
+    @player.flip_sprite(:none)
   end
   if event.key == 't'
     Camera.debug_y += 2
-    @player.height += 5
   end
   if event.key == 'g'
-    Camera.debug_y -= 2
-    @player.height -= 5
   end
 end
 
@@ -246,6 +220,6 @@ update do
   @ui_fps.text = "FPS: #{Window.fps.round(2)}"
   @ui_rotation.text = "Angle: #{Camera.angle}"
 
-  Camera.update
+  Camera.redraw
 end
 show

@@ -6,19 +6,32 @@ module Camera
   module SpriteWrapped
     # Recalculates real coordiantes
     # Use after changing variables
-    def update
+    def redraw
       angle = Camera.angle * (Math::PI / 180)
       half_width = Window.width * 0.5
       half_height = Window.height * 0.5
       offset_x = x + (width / 2)
       offset_y = y + (height / 2)
-      @x = (((offset_x - Camera.x) * Math.cos(angle)) - ((offset_y - Camera.y) * Math.sin(angle))) \
+      @x = @flip_x = (((offset_x - Camera.x) * Math.cos(angle)) - ((offset_y - Camera.y) * Math.sin(angle))) \
         * Camera.zoom + half_width - (width * Camera.zoom / 2)
-      @y = (((offset_x - Camera.x) * Math.sin(angle)) + ((offset_y - Camera.y) * Math.cos(angle))) \
+      @y = @flip_y = (((offset_x - Camera.x) * Math.sin(angle)) + ((offset_y - Camera.y) * Math.cos(angle))) \
         * Camera.zoom + half_height - (height * Camera.zoom / 2)
       @rotate = rotate + Camera.angle
-      @width = width * Camera.zoom
-      @height = height * Camera.zoom
+      @width = @flip_width = width * Camera.zoom
+      @height = @flip_height = height * Camera.zoom
+      case @flip
+      when :both
+        @flip_x = @x + @height
+        @flip_width = -@width
+        @flip_y = @y + @width
+        @flip_height = -@height
+      when :horizontal
+        @flip_y = @y + @width
+        @flip_height = -@height
+      when :vertical
+        @flip_x = @x + @height
+        @flip_width = -@width
+      end
     end
 
     #Methods for moving the shape
