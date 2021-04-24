@@ -8,17 +8,15 @@ module Camera
     # Use after changing variables
     def update
       angle = Camera.angle * (Math::PI / 180)
-      half_width = Window.width * 0.5
-      half_height = Window.height * 0.5
+      half_size = Window.size * 0.5
       offset_x = x + (width / 2)
       offset_y = y + (height / 2)
       @x = (((offset_x - Camera.x) * Math.cos(angle)) - ((offset_y - Camera.y) * Math.sin(angle))) \
-        * Camera.zoom + half_width - (width * Camera.zoom / 2)
+        * Camera.zoom + half_size #- (size * Camera.zoom / 2)
       @y = (((offset_x - Camera.x) * Math.sin(angle)) + ((offset_y - Camera.y) * Math.cos(angle))) \
-        * Camera.zoom + half_height - (height * Camera.zoom / 2)
+        * Camera.zoom + half_height #- (size * Camera.zoom / 2)
       @rotate = rotate + Camera.angle
-      @width = width * Camera.zoom
-      @height = height * Camera.zoom
+      @size = size * Camera.zoom
     end
 
     #Methods for moving the shape
@@ -54,20 +52,12 @@ module Camera
       @virtual_rotate = rotate
     end
 
-    def width
-      @virtual_width ||= @width
+    def size
+      @virtual_size ||= @size
     end
 
-    def width=(width)
-      @virtual_width = width
-    end
-
-    def height
-      @virtual_height ||= @height
-    end
-
-    def height=(height)
-      @virtual_height = height
+    def size=(size)
+      @virtual_size = size
     end
   end
 end

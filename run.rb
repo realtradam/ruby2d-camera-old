@@ -20,6 +20,15 @@ end
 Window.set(icon: './assets/player.png')
 
 # There is 2 ways you can add objects to be known and controlled by the camera, both do the same thing
+
+@square = Square.new(
+  x: 100, y: 100,
+  size: 125,
+  color: 'random'
+)
+
+Camera << @square
+
 25.times do
   tempx = (0..1920).to_a.sample
   tempy = (0..1080).to_a.sample
