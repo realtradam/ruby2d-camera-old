@@ -90,8 +90,8 @@ class House
     y = @y + 160
     if character.x >= x && character.x <= (x + (character.width * 2)) && character.y > y && character.y <= (y + (character.height * 2))
       Text.new('Press Space To Enter House',
-               x: x - 10,
-               y: y + 20,
+               x: x + 70,
+               y: y + 30,
                color: 'white',
                z: 98,
                size: 25.0)
