@@ -22,7 +22,7 @@ module Camera
 
     #Methods for moving the shape
     def x
-      @x ||= x1
+      @x ||= 0
     end
 
     def x=(x)
@@ -30,7 +30,7 @@ module Camera
     end
 
     def y
-      @y ||= y1
+      @y ||= 0
     end
 
     def y=(y)
@@ -87,8 +87,9 @@ module Camera
     def y3=(y3)
       @virtual_y3 = y3
     end
+
     def x4
-      @virtual_x3 ||= @x3
+      @virtual_x4 ||= @x4
     end
 
     def x4=(x4)

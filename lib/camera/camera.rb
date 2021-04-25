@@ -59,6 +59,10 @@ module Camera
     objects.push(item) unless objects.include?(item)
   end
 
+  def self.remove(item)
+    objects.delete(item) if objects.include?(item)
+  end
+
   # Redraw all objects that
   # are tracked by the Camera
   def self.redraw

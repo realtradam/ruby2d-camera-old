@@ -4,6 +4,15 @@ module Camera
 # Wraps existing variables as well as adding new methods
 # so that it can be handled by the Camera Module
   module RectangleWrapped
+    # Rectangles are part of the exception where
+    # their x and y variables need to be reset
+    # when wrapped
+    def self.extended(obj)
+      obj.instance_exec do
+        @x = 0
+        @y = 0
+      end
+    end
     # Recalculates real coordiantes
     # Use after changing variables
     def redraw
@@ -22,7 +31,7 @@ module Camera
 
     #Methods for moving the shape
     def x
-      @x ||= x1
+      @x ||= 0
     end
 
     def x=(x)
@@ -30,7 +39,7 @@ module Camera
     end
 
     def y
-      @y ||= y1
+      @y ||= 0
     end
 
     def y=(y)

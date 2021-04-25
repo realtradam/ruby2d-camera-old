@@ -10,9 +10,9 @@ module Camera
       angle = Camera.angle * (Math::PI / 180)
       half_width = Window.width * 0.5
       half_height = Window.height * 0.5
-      @x = (((x - Camera.x) * Math.cos(angle)) - ((y - Camera.y) * Math.sin(angle))) * Camera.zoom + half_width
-      @y = (((x - Camera.x) * Math.sin(angle)) + ((y - Camera.y) * Math.cos(angle))) * Camera.zoom + half_height
       @radius = radius * Camera.zoom
+      @x = (((x - Camera.x + radius) * Math.cos(angle)) - ((y - Camera.y + radius) * Math.sin(angle))) * Camera.zoom + half_width
+      @y = (((x - Camera.x + radius) * Math.sin(angle)) + ((y - Camera.y + radius) * Math.cos(angle))) * Camera.zoom + half_height
     end
 
     # Methods for moving the shape as well as
