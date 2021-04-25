@@ -82,7 +82,6 @@ class House
     @objects.each do |item|
       Camera.remove item
       item.remove
-      puts item
     end
   end
 
