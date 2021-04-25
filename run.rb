@@ -164,7 +164,7 @@ update do
   if !@scene_transition_into && !@scene_transition_out
     Camera.zoom += ((-[Math.sqrt(((@player.x + (@player.width / 2) - Camera.x)**2) + ((@player.y + (@player.width / 2) - Camera.y)**2)), 350].min * 0.004) + 2 - Camera.zoom) * 0.25
     Camera.x += (@player.x + (@player.width / 2) - Camera.x) * 0.025
-    Camera.y += (@player.y + (@player.height / 2)- Camera.y) * 0.025
+    Camera.y += (@player.y + (@player.height / 2) - Camera.y) * 0.025
   elsif @scene_transition_into
     if Camera.zoom < 250
       Camera.zoom *= 1.05

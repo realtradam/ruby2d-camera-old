@@ -65,8 +65,18 @@ module Camera
 
   # Redraw all objects that
   # are tracked by the Camera
-  def self.redraw
-    objects.each(&:redraw)
+  def self.redraw(auto_purge: true)
+    if auto_purge
+      objects.each do |item|
+        if item.nil?
+          objects.delete(obj)
+        else
+          item.redraw
+        end
+      end
+    else
+      objects.each(&:redraw)
+    end
   end
 
   # Variables changing Camera properties
