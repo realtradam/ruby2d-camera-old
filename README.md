@@ -20,7 +20,7 @@ Feel free to use any part of this code in your own projects, no credit required(
 Copy the `lib/camera/` directory into your ruby project and then in your code simply ```require_relative 'camera/camera'``` at the top. In your `Update do` loop you must add ```Camera.redraw``` at the bottom(this is so that the camera applies any changes you tell it to do). Your camera is now ready to use!
 
 To add an object to the camera simply do ```Camera << @your_object``` and the camera will do its magic on your object. Only the various shape/image/text/line/sprite/etc. from Ruby2D are supported.  
-Whenever an object is wrapped by the camera it gets `x` and `y` methods if it does not already have them which you can use to move the object around in the camera. The text object also gets a `center` method which you can set to true if you wish the origin of text to be its center. Otherwise the origin of all objects is the top left corner. Other then these methods mentioned, object behave as expected within the context of the camera.
+Whenever an object is wrapped by the camera it gets `x` and `y` methods if it does not already have them which you can use to move the object around in the camera. The text object also gets a `center` method which you can set to true if you wish the origin of text to be its center. Otherwise the origin of all objects is the top left corner. Other then these methods mentioned, object and their methods behave as expected within the context of the camera.
 
 When unloading an object, make sure to also remove it from the Camera or else it will attempt to update it when it is Nil. To do this use the following: `Camera.remove(@your_object)`
 
