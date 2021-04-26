@@ -65,10 +65,12 @@ module Camera
 
   # Redraw all objects that
   # are tracked by the Camera
-  def self.redraw(auto_purge: true)
+  def self.redraw(auto_purge: false)
     if auto_purge
       objects.each do |item|
         if item.nil?
+          puts "Warning: Nil Object detected in Camera"
+          puts "  Nil Object removed"
           objects.delete(obj)
         else
           item.redraw
