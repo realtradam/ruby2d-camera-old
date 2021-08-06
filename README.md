@@ -1,3 +1,7 @@
+# Deprecated:
+
+This library has been or is being reworked into a gem here: https://github.com/realtradam/ruby2d-camera
+
 # Ruby2D Camera Demo
 
 `ruby run.rb` to run the demo.
